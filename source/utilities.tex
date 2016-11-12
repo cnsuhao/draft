@@ -2363,10 +2363,6 @@ optional(const optional& rhs);
 
 \begin{itemdescr}
 \pnum
-\requires
-\tcode{is_copy_constructible_v<T>} is \tcode{true}.
-
-\pnum
 \effects
 If \tcode{rhs} contains a value, initializes the contained value as if
 direct-non-list-initializing an object of type \tcode{T} with the expression \tcode{*rhs}.
@@ -2378,6 +2374,11 @@ direct-non-list-initializing an object of type \tcode{T} with the expression \tc
 \pnum
 \throws
 Any exception thrown by the selected constructor of \tcode{T}.
+
+\pnum
+\remarks
+The function shall not participate in overload resolution
+unless \tcode{is_copy_constructible_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{optional}!constructor}%
@@ -2386,10 +2387,6 @@ optional(optional&& rhs) noexcept(@\seebelow@);
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_move_constructible_v<T>} is \tcode{true}.
-
 \pnum
 \effects
 If \tcode{rhs} contains a value, initializes the contained value as if
@@ -2408,6 +2405,8 @@ Any exception thrown by the selected constructor of \tcode{T}.
 \remarks
 The expression inside \tcode{noexcept} is equivalent to
 \tcode{is_nothrow_move_constructible_v<T>}.
+The function shall not participate in overload resolution
+unless \tcode{is_move_constructible_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{optional}!constructor}%
@@ -2416,10 +2415,6 @@ constexpr optional(const T& v);
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_copy_constructible_v<T>} is \tcode{true}.
-
 \pnum
 \effects
 Initializes the contained value as if direct-non-list-initializing an object of type \tcode{T} with the expression \tcode{v}.
@@ -2435,6 +2430,8 @@ Any exception thrown by the selected constructor of \tcode{T}.
 \pnum
 \remarks
 If \tcode{T}'s selected constructor is a \tcode{constexpr} constructor, this constructor shall be a \tcode{constexpr} constructor.
+The function shall not participate in overload resolution
+unless \tcode{is_copy_constructible_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{optional}!constructor}%
@@ -2443,10 +2440,6 @@ constexpr optional(T&& v);
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_move_constructible_v<T>} is \tcode{true}.
-
 \pnum
 \effects
 Initializes the contained value as if direct-non-list-initializing an object of type \tcode{T} with the expression \tcode{std::move(v)}.
@@ -2462,6 +2455,8 @@ Any exception thrown by the selected constructor of \tcode{T}.
 \pnum
 \remarks
 If \tcode{T}'s selected constructor is a \tcode{constexpr} constructor, this constructor shall be a \tcode{constexpr} constructor.
+The function shall not participate in overload resolution
+unless \tcode{is_move_constructible_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{optional}!constructor}%
@@ -2470,10 +2465,6 @@ template <class... Args> constexpr explicit optional(in_place_t, Args&&... args)
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_constructible_v<T, Args\&\&...>} is \tcode{true}.
-
 \pnum
 \effects
 Initializes the contained value as if direct-non-list-initializing an object of type \tcode{T} with the arguments \tcode{std::forward<Args>(args)...}.
@@ -2489,6 +2480,8 @@ Any exception thrown by the selected constructor of \tcode{T}.
 \pnum
 \remarks
 If \tcode{T}'s constructor selected for the initialization is a \tcode{constexpr} constructor, this constructor shall be a \tcode{constexpr} constructor.
+The function shall not participate in overload resolution
+unless \tcode{is_constructible_v<T, Args\&\&...>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrary{\idxcode{optional}!constructor}%
@@ -2498,11 +2491,6 @@ template <class U, class... Args>
 \end{itemdecl}
 
 \begin{itemdescr}
-
-\pnum
-\requires
-\tcode{is_constructible_v<T, initializer_list<U>\&, Args\&\&...>} is \tcode{true}.
-
 \pnum
 \effects
 Initializes the contained value as if direct-non-list-initializing an object of type \tcode{T} with the arguments \tcode{il, std::forward<Args>(args)...}.
@@ -2566,10 +2554,6 @@ optional<T>& operator=(const optional& rhs);
 
 \begin{itemdescr}
 \pnum
-\requires
-\tcode{is_copy_constructible_v<T>} is \tcode{true} and \tcode{is_copy_assignable_v<T>} is \tcode{true}.
-
-\pnum
 \effects
 See Table~\ref{tab:optional.assign.copy}.
 \begin{lib2dtab2}{\tcode{optional::operator=(const optional\&)} effects}{tab:optional.assign.copy}
@@ -2600,6 +2584,8 @@ If any exception is thrown, the result of the expression \tcode{bool(*this)} rem
 If an exception is thrown during the call to \tcode{T}'s copy constructor, no effect.
 If an exception is thrown during the call to \tcode{T}'s copy assignment,
 the state of its contained value is as defined by the exception safety guarantee of \tcode{T}'s copy assignment.
+The function shall not participate in overload resolution
+unless \tcode{is_copy_constructible_v<T> \&\&} \tcode{is_copy_assignable_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrarymember{operator=}{optional}%
@@ -2608,10 +2594,6 @@ optional<T>& operator=(optional&& rhs) noexcept(@\seebelow@);
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_move_constructible_v<T>} is \tcode{true} and \tcode{is_move_assignable_v<T>} is \tcode{true}.
-
 \pnum
 \effects
 See Table~\ref{tab:optional.assign.move}.
@@ -2651,6 +2633,8 @@ If an exception is thrown during the call to \tcode{T}'s move constructor,
 the state of \tcode{*rhs.val} is determined by the exception safety guarantee of \tcode{T}'s move constructor.
 If an exception is thrown during the call to \tcode{T}'s move assignment,
 the state of \tcode{*val} and \tcode{*rhs.val} is determined by the exception safety guarantee of \tcode{T}'s move assignment.
+The function shall not participate in overload resolution
+unless \tcode{is_move_constructible_v<T> \&\&} \tcode{is_move_assignable_v<T>} is \tcode{true}.
 \end{itemdescr}
 
 \indexlibrarymember{operator=}{optional}%
@@ -2659,10 +2643,6 @@ template <class U> optional<T>& operator=(U&& v);
 \end{itemdecl}
 
 \begin{itemdescr}
-\pnum
-\requires
-\tcode{is_constructible_v<T, U>} is \tcode{true} and \tcode{is_assignable_v<T\&, U>} is \tcode{true}.
-
 \pnum
 \effects
 If \tcode{*this} contains a value, assigns \tcode{std::forward<U>(v)} to the contained value; otherwise initializes the contained value as if direct-non-list-initializing object of type \tcode{T} with \tcode{std::forward<U>(v)}.
@@ -2678,8 +2658,9 @@ If \tcode{*this} contains a value, assigns \tcode{std::forward<U>(v)} to the con
 \pnum
 \remarks
 If any exception is thrown, the result of the expression \tcode{bool(*this)} remains unchanged. If an exception is thrown during the call to \tcode{T}'s constructor, the state of \tcode{v} is determined by the exception safety guarantee of \tcode{T}'s constructor. If an exception is thrown during the call to \tcode{T}'s assignment, the state of \tcode{*val} and \tcode{v} is determined by the exception safety guarantee of \tcode{T}'s assignment.
-The function shall not participate in overload resolution unless
-\tcode{is_same_v<decay_t<U>, T>} is \tcode{true}.
+The function shall not participate in overload resolution
+unless \tcode{is_same_v<decay_t<U>, T> \&\&} \tcode{is_constructible_v<T, U> \&\&}
+\tcode{is_assignable_v<T\&, U>} is \tcode{true}.
 
 \pnum
 \realnotes
